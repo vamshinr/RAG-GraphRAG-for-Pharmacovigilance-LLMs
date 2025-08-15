@@ -1,1 +1,8 @@
-
+flask
+pandas
+numpy
+transformers
+torch
+sentence-transformers
+faiss-cpu
+neo4j
