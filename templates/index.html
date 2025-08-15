@@ -1,1 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DrugGuard</title>
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+    <style>
+        body { max-width: 800px; margin: auto; padding: 1rem; }
+        .response { background-color: #f0f0f0; padding: 1rem; border-radius: 8px; margin-top: 1rem; white-space: pre-wrap; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>DrugGuard 💊</h1>
+        <p>LLM-Powered Drug Side Effect Retrieval</p>
+    </header>
+    <main>
+        <input type="text" id="query-input" placeholder="e.g., What are the side effects of Ibuprofen?">
+        <div>
+            <label>Retrieval Method:</label>
+            <select id="method-select">
+                <option value="rag">RAG</option>
+                <option value="graphrag">GraphRAG</option>
+            </select>
+        </div>
+        <button id="submit-btn">Ask</button>
+        <div id="response-container"></div>
+    </main>
 
+    <script>
+        document.getElementById('submit-btn').addEventListener('click', async () => {
+            const query = document.getElementById('query-input').value;
+            const method = document.getElementById('method-select').value;
+            const responseContainer = document.getElementById('response-container');
+            
+            if (!query) return;
+
+            responseContainer.innerHTML = '<p>Loading...</p>';
+
+            const response = await fetch('/query', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query, method })
+            });
+
+            const data = await response.json();
+            responseContainer.innerHTML = `<div class="response">${data.response}</div>`;
+        });
+    </script>
+</body>
+</html>
